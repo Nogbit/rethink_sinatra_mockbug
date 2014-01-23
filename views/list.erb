@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profiles</title>
+  <script src="js/jquery-2.0.3.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(".exportable").each(function() {
+        $(this).click(function() {
+
+          var id = this.id.replace("export_", "");
+          $.ajax({
+              type: "POST",
+              url: "/update/exportable.json",
+              data: {'id' : id, 'export' : this.checked}
+          })
+          .done(function(data) {
+            showAlert(data[0], data[1]);
+          })
+          .fail(function(jqXHR, textStatus) {
+            showAlert(true, textStatus);
+          });
+
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+<h1>Repo Steps</h1>
+<h3>1: Initialize Database</h3>
+a. only do this once, come back after submit<br>
+b. use the data explorer from rethinkdb admin<br>
+c. r.db("sinatra_test").table("person_test").get("jimbobtest")
+<form action="/init" method="POST">
+  <input type="submit" value="Initialize DB" />
+</form>
+
+<h3>2: Working example of index.rb post /udpate/exportable.json</h3>
+<form action="" role="form">
+  check to post<br>
+  console output from your running sinatra app should show no errors
+  also, you should see the entry in rethinkdb get updated<br>
+  <input type="checkbox" id="export_jimbobtest" class="exportable">
+</form>
+
+<h3>3: The bug....</h3>
+from the project root run the "rake" command<br>
+that will start a simple test and give you the error
